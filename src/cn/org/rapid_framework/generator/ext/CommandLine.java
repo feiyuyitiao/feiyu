@@ -1,6 +1,7 @@
 package cn.org.rapid_framework.generator.ext;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import cn.org.rapid_framework.generator.GeneratorFacade;
@@ -15,10 +16,19 @@ import cn.org.rapid_framework.generator.util.SystemHelper;
 public class CommandLine {
 	
 	public static void main(String[] args) throws Exception {
-		//disable freemarker logging
-		freemarker.log.Logger.selectLoggerLibrary(freemarker.log.Logger.LIBRARY_NONE);
+		deleteAll(new File("D:\\workspaces\\Git\\rapid-generator\\rapid-generator\\bin\\generator-output"));
+		freemarker.log.Logger.selectLoggerLibrary(freemarker.log.Logger.LIBRARY_NONE);//disable freemarker logging
+//		startProcess();
 		
-		startProcess();
+		//gen mkt_brand_interview,mkt_shop_survey ibatis3
+		GeneratorFacade facade = new GeneratorFacade();
+		facade.g.setIncludes("ibatis3/**");
+		//------------------------------------------------需要更改的参数在这里
+//		String[] strs = new String[]{"bes_call_record","bes_former_user_merchant","bes_monthly_report","bes_requirement","bes_talking_skills"};
+		String[] strs = new String[]{"mkt_business_type","mkt_former_sales_merchant"};
+		for (String string : strs) {
+			facade.generateByTable(string,getTemplateRootDir());
+		}
 	}
 
 	private static void startProcess() throws Exception {
@@ -105,5 +115,19 @@ public class CommandLine {
 	
 	private static String[] nextArguments(Scanner sc) {
 		return StringHelper.tokenizeToStringArray(sc.nextLine()," ");
+	}
+
+	public static void deleteAll(File file) {
+		if (file.isFile() || (file.list()!=null&&file.list().length == 0)) {
+			file.delete();
+		} else {
+			File[] files = file.listFiles();
+			if(files!=null){
+				for (File f : files) {
+					deleteAll(f);// 递归删除每一个文件
+					f.delete();// 删除该文件夹
+				}
+			}
+		}
 	}
 }

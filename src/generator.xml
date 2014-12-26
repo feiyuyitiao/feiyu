@@ -2,13 +2,13 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 	<comment>
-		代码生成器配置文件: 
+		代码生成器配置文件: tt
 		1.会为所有的property生成property_dir属性,如pkg=com.company => pkg_dir=com/company
 		2.可以引用环境变量: ${env.JAVA_HOME} or System.properties: ${user.home},property之间也可以相互引用
-	</comment>
+	</comment> 
 	
-	<entry key="modelname">system</entry>
-	<entry key="basepackage">com.yazuo.erp.system</entry>
+	<entry key="modelname">mkt</entry>
+	<entry key="basepackage">com.yazuo.erp.mkt</entry>
 	
 	<!-- jsp namespace: web/${namespace}/${className}/list.jsp -->
 	<entry key="namespace">pages</entry>
@@ -30,15 +30,16 @@
 	<entry key="java_typemapping.java.lang.Short">Integer</entry>
 	<entry key="java_typemapping.java.math.BigDecimal">java.math.BigDecimal</entry>
 	
-<!-- 	<entry key="jdbc.username">postgres</entry>
-	<entry key="jdbc.password">test</entry>  -->
 	<entry key="jdbc.username">erp</entry>
 	<entry key="jdbc.password">erp</entry>
-	<!-- PostgreSql-->
-   <!--	 <entry key="jdbc.url">jdbc:postgresql://localhost/erp</entry> --> 
- <entry key="jdbc.url">jdbc:postgresql://192.168.236.210/erp</entry>
+ 	<entry key="jdbc.url">jdbc:postgresql://192.168.236.210/erp</entry> 
+	
+	<!-- 
+	<entry key="jdbc.url">jdbc:postgresql://localhost/erp-51-2014-10-28</entry>
+	<entry key="jdbc.username">postgres</entry>
+	<entry key="jdbc.password">test</entry>  -->
+	
 	<entry key="jdbc.driver">org.postgresql.Driver</entry>
-	 
 	
 	<!-- H2 
 	<entry key="jdbc.url">jdbc:h2:tcp://localhost/test</entry>

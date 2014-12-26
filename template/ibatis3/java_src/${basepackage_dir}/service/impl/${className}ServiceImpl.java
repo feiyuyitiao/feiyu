@@ -6,18 +6,42 @@ package ${basepackage}.service.impl;
 
 <#include "/java_imports.include">
 
+import java.util.Date;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import com.yazuo.erp.${modelname}.service.${className}Service;
+import com.yazuo.erp.base.Constant;
+import com.yazuo.erp.system.vo.SysUserVO;
 
 @Service
 public class ${className}ServiceImpl implements ${className}Service {
 	
 	@Resource
 	private ${className}Dao ${classNameLower}Dao;
+	
+	@Override
+	public int saveOrUpdate${className} (${classEntity} ${classNameLower}, SysUserVO sessionUser) {
+		Integer id = ${classNameLower}.getId();
+		Integer userId = sessionUser.getId();
+		int row = -1;
+		if(id!=null){
+			${classNameLower}.setUpdateBy(userId);
+			${classNameLower}.setUpdateTime(new Date());
+			${classNameLower}.setIsEnable(Constant.Enable);
+			row = ${classNameLower}Dao.update${className}(${classNameLower});
+		}else{
+			${classNameLower}.setInsertBy(userId);
+			${classNameLower}.setInsertTime(new Date());
+			${classNameLower}.setUpdateBy(userId);
+			${classNameLower}.setUpdateTime(new Date());
+			${classNameLower}.setIsEnable(Constant.Enable);
+			row = ${classNameLower}Dao.save${className}(${classNameLower});
+		}
+		return row;
+	}
 	
 	public int save${className} (${classEntity} ${classNameLower}) {
 		return ${classNameLower}Dao.save${className}(${classNameLower});

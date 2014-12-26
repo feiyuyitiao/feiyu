@@ -25,7 +25,11 @@ public class ${className} implements java.io.Serializable{
 
 	//columns START
 	<#list table.columns as column>
+		<#if column.javaType=='java.sql.Array'>
+	private String[] ${column.columnNameLower}; //"${column.columnAlias}";
+		<#else>
 	private ${column.javaType} ${column.columnNameLower}; //"${column.columnAlias}";
+		</#if>
 	</#list>
 	//columns END
 
@@ -73,6 +77,15 @@ public class ${className} implements java.io.Serializable{
 
 <#macro generateJavaColumns>
 	<#list table.columns as column>
+	<#if column.javaType=='java.sql.Array'>
+	public void set${column.columnName}(String[] value) {
+		this.${column.columnNameLower} = value;
+	}
+	
+	public String[] get${column.columnName}() {
+		return this.${column.columnNameLower};
+	}
+		<#else>
 	public void set${column.columnName}(${column.javaType} value) {
 		this.${column.columnNameLower} = value;
 	}
@@ -80,6 +93,8 @@ public class ${className} implements java.io.Serializable{
 	public ${column.javaType} get${column.columnName}() {
 		return this.${column.columnNameLower};
 	}
+		</#if>
+		
 	</#list>
 </#macro>
 

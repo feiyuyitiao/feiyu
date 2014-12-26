@@ -20,6 +20,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -61,8 +62,9 @@ public class ${className}Controller {
 	 */
 	@RequestMapping(value = "save${className}", method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
-	public JsonResult save${className}(@RequestBody ${className}VO ${classNameLower}) {
-		int count = ${classNameLower}Service.save${className}(${classNameLower});
+	public JsonResult save${className}(@RequestBody ${className}VO ${classNameLower}, HttpSession session) {
+		SysUserVO sessionUser = (SysUserVO)session.getAttribute(Constant.SESSION_USER);
+		int count = ${classNameLower}Service.saveOrUpdate${className}(${classNameLower}, sessionUser);
 		return new JsonResult(count > 0).setMessage(count > 0 ? "保存成功!" : "保存失败!");
 	}
 	

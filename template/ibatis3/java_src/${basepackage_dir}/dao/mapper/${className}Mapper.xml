@@ -31,6 +31,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
      <#list table.columns as column>
         <#if column.pk>
     	<id property="${column.columnNameLower}" column="${column.sqlName}"/>
+    	<#elseif column.javaType=='java.sql.Array'>
+    	<result property="${column.columnNameLower}" column="${column.sqlName}" typeHandler="com.yazuo.erp.interceptors.ArrayTypeHandler"/>
     	<#else>
     	<result property="${column.columnNameLower}" column="${column.sqlName}"/>
     	</#if>
@@ -89,13 +91,13 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         INSERT INTO <@database/>${table.sqlName} (
         <#list table.columns as column>
         	<#if !column.unique && !column.pk>
-        	 <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'>and ${column.columnNameFirstLower}!=''</#if>">${column.sqlName}<#if column_has_next>,</#if></if>
+        	 <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'&&  column.javaType!='java.sql.Array'>and ${column.columnNameFirstLower}!=''</#if>">${column.sqlName}<#if column_has_next>,</#if></if>
         	</#if>
         </#list>
         ) VALUES (
         <#list table.columns as column>
        	  <#if !column.unique && !column.pk>
-       	    <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'>and ${column.columnNameFirstLower}!=''</#if>"><#if column.sqlName=='insert_time'||column.sqlName=='update_time'>now()<#else><@mapperEl column.columnNameFirstLower/></#if><#if column_has_next>,</#if></if>
+       	    <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'&&  column.javaType!='java.sql.Array'>and ${column.columnNameFirstLower}!=''</#if>"><#if column.sqlName=='insert_time'||column.sqlName=='update_time'>now()<#else><@mapperEl column.columnNameFirstLower/></#if><#if column_has_next>,</#if></if>
           </#if>
         </#list>  
         )
@@ -106,12 +108,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         INSERT INTO <@database/>${table.sqlName} (
         <#list table.columns as column>
         	<#if !column.unique && !column.pk>
-        	 <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'>and ${column.columnNameFirstLower}!=''</#if>">${column.sqlName}<#if column_has_next>,</#if></if>
+        	 <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'&&  column.javaType!='java.sql.Array'>and ${column.columnNameFirstLower}!=''</#if>">${column.sqlName}<#if column_has_next>,</#if></if>
         	</#if>
         </#list>
         ) VALUES 
             <foreach collection="list" item="t" separator=",">
-           (<#list table.columns as column><#if !column.unique && !column.pk>  <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'>and ${column.columnNameFirstLower}!=''</#if>"><#if column.sqlName=='insert_time'||column.sqlName=='update_time'>now()<#else><@mapperEl "t."+column.columnNameFirstLower/></#if><#if column_has_next>,</#if></if></#if>
+           (<#list table.columns as column><#if !column.unique && !column.pk>  <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'&&  column.javaType!='java.sql.Array'>and ${column.columnNameFirstLower}!=''</#if>"><#if column.sqlName=='insert_time'||column.sqlName=='update_time'>now()<#else><@mapperEl "t."+column.columnNameFirstLower/></#if><#if column_has_next>,</#if></if></#if>
         </#list> )
         </foreach>
 	</insert>
@@ -120,7 +122,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         UPDATE <@database/>${table.sqlName} 
  		  <set>
 	        <#list table.notPkColumns as column>
-	        <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'>and ${column.columnNameFirstLower}!=''</#if>">${column.sqlName} = <#if column.sqlName=='update_time'>now()<#else><@mapperEl column.columnNameFirstLower/></#if> <#if column_has_next>,</#if></if>
+	        <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'&&  column.javaType!='java.sql.Array'>and ${column.columnNameFirstLower}!=''</#if>">${column.sqlName} = <#if column.sqlName=='update_time'>now()<#else><@mapperEl column.columnNameFirstLower/></#if> <#if column_has_next>,</#if></if>
 	        </#list>
 	      </set>  
         WHERE 
@@ -134,7 +136,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         UPDATE <@database/>${table.sqlName} 
  		  <set>
 	        <#list table.notPkColumns as column>
-	        <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'>and ${column.columnNameFirstLower}!=''</#if>">${column.sqlName} = <#if column.sqlName=='update_time'>now()<#else><@mapperEl "t."+column.columnNameFirstLower/></#if> <#if column_has_next>,</#if></if>
+	        <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'&&  column.javaType!='java.sql.Array'>and ${column.columnNameFirstLower}!=''</#if>">${column.sqlName} = <#if column.sqlName=='update_time'>now()<#else><@mapperEl "t."+column.columnNameFirstLower/></#if> <#if column_has_next>,</#if></if>
 	        </#list>
 	      </set>  
         WHERE 
@@ -149,7 +151,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
         UPDATE <@database/>${table.sqlName} 
  		  <set>
 	        <#list table.notPkColumns as column>
-	        <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'>and ${column.columnNameFirstLower}!=''</#if>">${column.sqlName} = <#if column.sqlName=='update_time'>now()<#else><@mapperEl column.columnNameFirstLower/></#if> <#if column_has_next>,</#if></if>
+	        <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'&&  column.javaType!='java.sql.Array'>and ${column.columnNameFirstLower}!=''</#if>">${column.sqlName} = <#if column.sqlName=='update_time'>now()<#else><@mapperEl column.columnNameFirstLower/></#if> <#if column_has_next>,</#if></if>
 	        </#list>
 	      </set>  
         WHERE id IN <foreach collection="list" item="id" open="(" close=")" separator=","><@mapperEl "id"/></foreach>       
@@ -197,10 +199,10 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<where>	      				
 	       <#list table.columns as column>
 	       <#if column.isDateTimeColumn>
-		   <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'>and ${column.columnNameFirstLower}!=''</#if>">AND ${column.sqlName} >= <@mapperEl column.columnNameFirstLower/></if>
-		   <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'>and ${column.columnNameFirstLower}!=''</#if>">AND ${column.sqlName} &lt;= <@mapperEl column.columnNameFirstLower/></if>
+		   <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'&&  column.javaType!='java.sql.Array'>and ${column.columnNameFirstLower}!=''</#if>">AND ${column.sqlName} >= <@mapperEl column.columnNameFirstLower/></if>
+		   <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'&&  column.javaType!='java.sql.Array'>and ${column.columnNameFirstLower}!=''</#if>">AND ${column.sqlName} &lt;= <@mapperEl column.columnNameFirstLower/></if>
 	       <#else>
-	       <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'>and ${column.columnNameFirstLower}!=''</#if>">AND ${column.sqlName} = <@mapperEl column.columnNameFirstLower/></if>
+	       <if test="${column.columnNameFirstLower}!=null <#if column.javaType!='java.lang.Integer' &&  column.javaType!='java.util.Date'&&  column.javaType!='java.lang.Boolean'&&  column.javaType!='java.sql.Array'>and ${column.columnNameFirstLower}!=''</#if>">AND ${column.sqlName} = <@mapperEl column.columnNameFirstLower/></if>
 	       </#if>
 	       </#list>			
 		</where>

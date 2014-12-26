@@ -6,16 +6,23 @@ package ${basepackage}.service;
 
 import java.util.Map;
 
+import com.yazuo.erp.bes.vo.BesTalkingSkillsVO;
+import com.yazuo.erp.system.vo.SysUserVO;
+
 <#include "/java_imports.include">
 
 public interface ${className}Service{
-	
+
+	/**
+	 * 保存或修改
+	 */
+	int saveOrUpdate${className} (${classEntity} ${classNameLower}, SysUserVO sessionUser);
    /**
 	 * 新增对象 @return : 新增加的主键id
 	 */
 	int save${className} (${classEntity} ${classNameLower});
 	/**
-	 * 新增多个对象 @return : //TODO
+	 * 新增多个对象 @return 
 	 */
 	int batchInsert${className}s (Map<String, Object> map);
 	/**
